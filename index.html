@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hindi Sahitya – Mind Map v2</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Tiro+Devanagari+Hindi:ital@0;1&family=Crimson+Pro:ital,wght@0,300;0,600;1,300&family=Space+Mono:wght@400;700&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --saffron: #E8621A;
+    --deep: #1A0A2E;
+    --gold: #D4A017;
+    --teal: #1B7A8A;
+    --rose: #C0435A;
+    --sage: #4A7C59;
+    --cream: #FDF6EC;
+    --lavender: #6B4E9E;
+    --amber: #B87333;
+  }
+
+  body {
+    background: var(--deep);
+    min-height: 100vh;
+    font-family: 'Crimson Pro', serif;
+    color: var(--cream);
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background:
+      radial-gradient(ellipse 60% 50% at 20% 30%, rgba(212,160,23,0.08) 0%, transparent 70%),
+      radial-gradient(ellipse 50% 60% at 80% 70%, rgba(232,98,26,0.07) 0%, transparent 70%);
+    pointer-events: none; z-index: 0;
+  }
+
+  header {
+    text-align: center;
+    padding: 2.5rem 2rem 1rem;
+    position: relative; z-index: 10;
+  }
+
+  .subtitle-tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.62rem; letter-spacing: 0.25em;
+    color: var(--gold); text-transform: uppercase;
+    opacity: 0.8; margin-bottom: 0.6rem;
+  }
+
+  h1 {
+    font-family: 'Tiro Devanagari Hindi', serif;
+    font-size: clamp(1.5rem, 4vw, 2.6rem);
+    font-weight: 400; color: var(--cream); line-height: 1.2;
+  }
+  h1 span { color: var(--gold); }
+
+  .divider {
+    width: 60px; height: 2px;
+    background: linear-gradient(90deg, transparent, var(--saffron), transparent);
+    margin: 0.8rem auto 0;
+  }
+
+  /* ── TABS ── */
+  .tabs {
+    display: flex; justify-content: center; gap: 0.4rem;
+    padding: 1.5rem 1rem; flex-wrap: wrap;
+    position: relative; z-index: 10;
+  }
+
+  .tab-btn {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem; letter-spacing: 0.08em;
+    text-transform: uppercase; padding: 0.45rem 1rem;
+    border: 1px solid rgba(212,160,23,0.3);
+    background: transparent; color: rgba(253,246,236,0.55);
+    cursor: pointer; border-radius: 2px; transition: all 0.25s;
+  }
+  .tab-btn:hover, .tab-btn.active {
+    background: rgba(212,160,23,0.12);
+    color: var(--gold); border-color: var(--gold);
+  }
+
+  /* ── SECTIONS ── */
+  .section {
+    display: none; padding: 0 1.5rem 4rem;
+    max-width: 1100px; margin: 0 auto;
+    position: relative; z-index: 5;
+  }
+  .section.visible { display: block; animation: fadeUp 0.45s ease; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(18px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .section-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.58rem; letter-spacing: 0.2em;
+    text-transform: uppercase; color: var(--gold);
+    opacity: 0.5; margin-bottom: 1.4rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid rgba(212,160,23,0.15);
+  }
+
+  /* ── CARDS ── */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.1rem; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.1rem; }
+  @media (max-width: 700px) { .grid-2, .grid-3 { grid-template-columns: 1fr; } }
+  .span-2 { grid-column: 1 / -1; }
+  .span-3 { grid-column: 1 / -1; }
+
+  .card {
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 8px; padding: 1.3rem 1.5rem;
+    background: rgba(255,255,255,0.03);
+    backdrop-filter: blur(6px);
+    position: relative; overflow: hidden;
+    transition: transform 0.22s, border-color 0.22s;
+  }
+  .card:hover { transform: translateY(-2px); border-color: rgba(212,160,23,0.25); }
+  .card::before {
+    content: ''; position: absolute;
+    top: 0; left: 0; width: 3px; height: 100%;
+  }
+  .card.saffron::before { background: var(--saffron); }
+  .card.gold::before    { background: var(--gold); }
+  .card.teal::before    { background: var(--teal); }
+  .card.rose::before    { background: var(--rose); }
+  .card.sage::before    { background: var(--sage); }
+  .card.lavender::before { background: var(--lavender); }
+  .card.amber::before   { background: var(--amber); }
+
+  .card-icon { font-size: 1.6rem; margin-bottom: 0.5rem; display: block; }
+  .card-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.62rem; letter-spacing: 0.12em;
+    text-transform: uppercase; margin-bottom: 0.6rem; opacity: 0.45;
+  }
+  .card h3 {
+    font-family: 'Tiro Devanagari Hindi', serif;
+    font-size: 1.1rem; font-weight: 400;
+    color: var(--gold); margin-bottom: 0.55rem;
+  }
+  .card p, .card li { font-size: 0.93rem; line-height: 1.75; opacity: 0.83; }
+  .card ul { list-style: none; padding: 0; }
+  .card ul li { display: flex; gap: 0.5rem; margin-bottom: 0.3rem; }
+  .card ul li::before {
+    content: '◆'; font-size: 0.45rem; color: var(--gold);
+    opacity: 0.55; margin-top: 0.4rem; flex-shrink: 0;
+  }
+
+  /* Tags */
+  .tag {
+    display: inline-block; font-family: 'Space Mono', monospace;
+    font-size: 0.6rem; padding: 0.18rem 0.55rem;
+    border-radius: 20px; margin: 0.2rem 0.15rem 0 0; letter-spacing: 0.05em;
+  }
+  .tag.s { background: rgba(232,98,26,0.16); color: #F5935A; border: 1px solid rgba(232,98,26,0.28); }
+  .tag.g { background: rgba(212,160,23,0.14); color: #E8C547; border: 1px solid rgba(212,160,23,0.28); }
+  .tag.t { background: rgba(27,122,138,0.16); color: #5EC6D8; border: 1px solid rgba(27,122,138,0.32); }
+  .tag.r { background: rgba(192,67,90,0.16); color: #E07585; border: 1px solid rgba(192,67,90,0.28); }
+  .tag.sg{ background: rgba(74,124,89,0.16); color: #7DBF93; border: 1px solid rgba(74,124,89,0.28); }
+  .tag.lv{ background: rgba(107,78,158,0.16); color: #B09ADA; border: 1px solid rgba(107,78,158,0.28); }
+
+  .badge {
+    display: inline-block; font-family: 'Space Mono', monospace;
+    font-size: 0.56rem; padding: 0.12rem 0.45rem; border-radius: 2px;
+    margin-left: 0.4rem; background: rgba(192,67,90,0.18);
+    color: #E07585; border: 1px solid rgba(192,67,90,0.28); vertical-align: middle;
+  }
+
+  /* Timeline */
+  .timeline { position: relative; padding-left: 1.8rem; }
+  .timeline::before {
+    content: ''; position: absolute; left: 0.5rem; top: 0.4rem;
+    bottom: 0; width: 2px;
+    background: linear-gradient(180deg, var(--gold), transparent);
+  }
+  .tl-item { position: relative; margin-bottom: 1.1rem; }
+  .tl-item::before {
+    content: ''; position: absolute;
+    left: -1.42rem; top: 0.5rem;
+    width: 9px; height: 9px; border-radius: 50%;
+    background: var(--saffron);
+    box-shadow: 0 0 0 3px rgba(232,98,26,0.15);
+  }
+  .tl-year {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.62rem; color: var(--saffron); letter-spacing: 0.1em;
+    margin-bottom: 0.2rem; opacity: 0.85;
+  }
+  .tl-text { font-size: 0.93rem; line-height: 1.7; opacity: 0.83; }
+
+  /* Accordion for Bhramargeet */
+  .accordion { border: 1px solid rgba(212,160,23,0.15); border-radius: 6px; overflow: hidden; }
+  .acc-head {
+    width: 100%; text-align: left; padding: 0.85rem 1.2rem;
+    background: rgba(255,255,255,0.03); border: none;
+    cursor: pointer; display: flex; justify-content: space-between;
+    align-items: center; color: var(--cream);
+    font-family: 'Crimson Pro', serif; font-size: 1rem;
+    transition: background 0.2s; border-bottom: 1px solid rgba(212,160,23,0.1);
+  }
+  .acc-head:hover { background: rgba(212,160,23,0.07); }
+  .acc-head .arrow { font-size: 0.7rem; transition: transform 0.25s; opacity: 0.5; }
+  .acc-head.open .arrow { transform: rotate(180deg); }
+  .acc-body { display: none; padding: 1rem 1.2rem; font-size: 0.93rem; line-height: 1.75; opacity: 0.82; }
+  .acc-body.open { display: block; animation: fadeUp 0.3s ease; }
+  .acc-title { color: var(--gold); font-weight: 600; margin-bottom: 0.3rem; }
+
+  /* Dialect area pills */
+  .area-pill {
+    display: inline-flex; align-items: center; gap: 0.4rem;
+    padding: 0.3rem 0.8rem; border-radius: 20px; margin: 0.25rem;
+    font-size: 0.82rem; border: 1px solid;
+  }
+  .area-pill .dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+
+  /* Shaili examples */
+  .example-block {
+    background: rgba(0,0,0,0.2); border-left: 3px solid var(--gold);
+    padding: 0.8rem 1rem; border-radius: 0 6px 6px 0;
+    margin: 0.6rem 0; font-style: italic; font-size: 0.9rem;
+    line-height: 1.8; opacity: 0.85;
+  }
+  .example-label {
+    font-family: 'Space Mono', monospace; font-size: 0.58rem;
+    text-transform: uppercase; letter-spacing: 0.12em;
+    color: var(--gold); opacity: 0.7; margin-bottom: 0.3rem;
+    font-style: normal;
+  }
+
+  /* Tree (Bhasha) */
+  .tree-wrap { overflow-x: auto; padding: 1rem 0 2rem; }
+  .tree { display: flex; flex-direction: column; align-items: center; min-width: 820px; }
+  .node { display: flex; flex-direction: column; align-items: center; }
+  .node-box {
+    border: 1.5px solid rgba(212,160,23,0.4); border-radius: 6px;
+    padding: 0.5rem 1.1rem;
+    font-family: 'Tiro Devanagari Hindi', serif; font-size: 0.88rem;
+    background: rgba(212,160,23,0.07); color: var(--gold);
+    white-space: nowrap; text-align: center; cursor: default; transition: all 0.2s;
+  }
+  .node-box:hover { background: rgba(212,160,23,0.16); transform: scale(1.04); }
+  .node-box.root { font-size: 1rem; background: rgba(232,98,26,0.14); border-color: var(--saffron); color: #F5935A; padding: 0.65rem 1.6rem; }
+  .node-box.branch { background: rgba(27,122,138,0.11); border-color: var(--teal); color: #5EC6D8; }
+  .node-box.leaf { font-size: 0.78rem; padding: 0.3rem 0.75rem; background: rgba(74,124,89,0.09); border-color: var(--sage); color: #7DBF93; }
+  .node-box.leaf.hl { background: rgba(192,67,90,0.11); border-color: var(--rose); color: #E07585; }
+  .conn-v { width: 2px; background: rgba(212,160,23,0.22); flex-shrink: 0; }
+  .children-row { display: flex; align-items: flex-start; }
+  .child-col { display: flex; flex-direction: column; align-items: center; padding: 0 0.7rem; }
+  .h-line { height: 2px; background: rgba(212,160,23,0.18); align-self: flex-start; top: 24px; position: relative; }
+  .grandleaves { display: flex; flex-direction: column; gap: 0.3rem; align-items: center; margin-top: 0.35rem; }
+
+  /* Summary Table */
+  .table-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.9rem; border: 1px solid rgba(255,255,255,0.06); }
+  th { font-family: 'Space Mono', monospace; font-size: 0.62rem; letter-spacing: 0.14em; text-transform: uppercase; padding: 0.85rem 1.1rem; background: rgba(212,160,23,0.09); color: var(--gold); text-align: left; border-bottom: 1px solid rgba(212,160,23,0.18); }
+  td { padding: 0.8rem 1.1rem; border-bottom: 1px solid rgba(255,255,255,0.04); line-height: 1.65; vertical-align: top; }
+  tr:hover td { background: rgba(255,255,255,0.02); }
+  td:first-child { color: var(--saffron); font-weight: 600; white-space: nowrap; }
+
+  .mt { margin-top: 1.2rem; }
+  .mb { margin-bottom: 1.2rem; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="subtitle-tag">Hindi Sahitya · Upgraded Mind Map v2</div>
+  <h1>हिन्दी साहित्य <span>&</span> भाषा</h1>
+  <p style="font-size:0.88rem;opacity:0.45;font-style:italic;margin-top:0.3rem;">Bhakti Kaal · Surdas · Dialects · Origins</p>
+  <div class="divider"></div>
+</header>
+
+<nav class="tabs">
+  <button class="tab-btn active" onclick="showTab('bio',this)">🧑‍🎨 Biography</button>
+  <button class="tab-btn" onclick="showTab('surdas',this)">📖 Surdas Sahitya</button>
+  <button class="tab-btn" onclick="showTab('bhramargeet',this)">🐝 Bhramargeet</button>
+  <button class="tab-btn" onclick="showTab('shaili',this)">✍️ Kavya Shaili</button>
+  <button class="tab-btn" onclick="showTab('bhasha',this)">🌿 Hindi Boliyan</button>
+  <button class="tab-btn" onclick="showTab('summary',this)">📋 Summary</button>
+</nav>
+
+<!-- ══════════════════════════════════
+     TAB 1: BIOGRAPHY
+══════════════════════════════════ -->
+<div id="tab-bio" class="section visible">
+  <p class="section-label">Surdas — Jeevan Parichay (Life Story)</p>
+
+  <div class="grid-2 mb">
+    <div class="card saffron">
+      <span class="card-icon">👁️</span>
+      <div class="card-label">Identity</div>
+      <h3>सूरदास — Kon The?</h3>
+      <ul>
+        <li>Janam: <strong>1478 AD</strong> (approx), Sihi village, Faridabad ke paas</li>
+        <li>Mrityu: <strong>1583 AD</strong> (approx), Parasoli, Mathura</li>
+        <li><strong>Janm se andhe</strong> the — lekin unki kavya-drishti adbhut thi</li>
+        <li>Pura naam: <strong>Surdas Madhusudan</strong></li>
+        <li>Guru: <strong>Vallabhacharya</strong> — Pushti Maarg ke pravartak</li>
+      </ul>
+    </div>
+
+    <div class="card rose">
+      <span class="card-icon">🛐</span>
+      <div class="card-label">Dharm aur Sampraday</div>
+      <h3>भक्ति & दर्शन</h3>
+      <ul>
+        <li>Sampraday: <strong>Pushti Maarg</strong> (Vallabha Sampraday)</li>
+        <li>Bhakti Prakar: <strong>Sakhya Bhakti</strong> — dost ki tarah bhakti</li>
+        <li>Ishta Dev: <strong>Shri Krishna</strong> — Bal Krishna ke vishesha bhakt</li>
+        <li>Ashta Chhap ke <strong>sabse pramukh kavi</strong> — 8 bhakton mein sarvashreshtha</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card gold mb">
+    <span class="card-icon">⏳</span>
+    <div class="card-label">Jeevan ki Mukhya Ghatnayen (Timeline)</div>
+    <h3>जीवन यात्रा</h3>
+    <div class="timeline mt">
+      <div class="tl-item">
+        <div class="tl-year">~ 1478 AD</div>
+        <div class="tl-text">Sihi (Haryana) mein janam. Kuch viद्वaan inhe Mathura ke paas Runakta ka bhi maante hain.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year">Yuvavastha</div>
+        <div class="tl-text">Govardhan ki parikrama ke dauran <strong>Guru Vallabhacharya</strong> se mulaqaat — "Prabhu mujhe apna das banao" keh kar shishya bane.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year">Madhya kaal</div>
+        <div class="tl-text">Vrindavan-Mathura mein rehkar Krishna bhakti mein lin. Sursagar, Saravali, Sahitya Lahiri ki rachna ki.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year">Akbar se bhent</div>
+        <div class="tl-text">Mughal Samrat Akbar bhi unke bhajan sunne aaye — unki kavya-pratibha ki charcha door-door tak thi.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year">~ 1583 AD</div>
+        <div class="tl-text">Parasoli (Mathura) mein deh tyag — aakhiri pal bhi Krishna naam ke saath.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card teal">
+      <span class="card-icon">🎵</span>
+      <div class="card-label">Kala aur Pratibha</div>
+      <h3>Unique Qualities</h3>
+      <ul>
+        <li>Andhe hone ke bavjood <strong>rang, roop, prakriti</strong> ka jeevant varnan</li>
+        <li>Sangeet mein bhi nipun — apne pad khud gaate the</li>
+        <li><strong>"Soor Saagar"</strong> mein 1 lakh se zyada pad likhe (kuch upalabdh hain)</li>
+        <li>Unhe <em>"Hindi ka Homeros"</em> bhi kaha jaata hai</li>
+      </ul>
+    </div>
+    <div class="card sage">
+      <span class="card-icon">🏛️</span>
+      <div class="card-label">Kaal aur Parivesh</div>
+      <h3>Bhakti Kaal Context</h3>
+      <ul>
+        <li>Kaal: <strong>Madhya Kaal → Bhakti Kaal</strong> (1350–1650 AD approx)</li>
+        <li>Saath ke kavi: Tulsidas, Meera, Kabir, Rahim</li>
+        <li>Bhakti andolan ke dौr mein <strong>Saguna Bhakti</strong> ke pramukh pratinidhi</li>
+        <li>Vallabhacharya ke <strong>Ashta Chhap</strong> mein sarvopari sthan</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     TAB 2: SURDAS SAHITYA
+══════════════════════════════════ -->
+<div id="tab-surdas" class="section">
+  <p class="section-label">Surdas ki Rachnayein aur Ras</p>
+
+  <div class="grid-2 mb">
+    <div class="card gold">
+      <span class="card-icon">📚</span>
+      <div class="card-label">Teen Pramukh Granth</div>
+      <h3>तीन मुख्य रचनाएँ</h3>
+      <ul>
+        <li>
+          <div>
+            <strong>सूरसागर</strong> <span class="badge">MAIN WORK</span><br>
+            <span style="font-size:0.85rem;opacity:0.75;">Shrimad Bhagvat Puran par aadharit. Krishna ki bal-leela, Bhramargeet, Raas-leela sab isme hain. ~1 lakh pad.</span>
+          </div>
+        </li>
+        <li>
+          <div>
+            <strong>सूर सरावली</strong><br>
+            <span style="font-size:0.85rem;opacity:0.75;">Holi ke mauke par likhe pad. Krishna aur Radha ki leela ka varnan. ~1107 pad upalabdh.</span>
+          </div>
+        </li>
+        <li>
+          <div>
+            <strong>साहित्य लहरी</strong><br>
+            <span style="font-size:0.85rem;opacity:0.75;">118 pad. Nayika-bhed, alankaar, aur Surdas ki vanshaavali ka ullekh. Yeh ek shringar kavya bhi hai.</span>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <div class="card rose">
+      <span class="card-icon">❤️</span>
+      <div class="card-label">Pramukh Ras</div>
+      <h3>वात्सल्य रस के सम्राट</h3>
+      <p style="margin-bottom:0.7rem;">Krishna ke bachpan ka aise varnan kiya jaise maa apne bache ko dekh rahi ho:</p>
+      <ul>
+        <li>
+          <div><strong>Sanyog Vatsalya</strong><br>
+          <span style="font-size:0.85rem;opacity:0.75;">Krishna ke saath hone ki khushi — maiya-Yashoda ka pyaar, machalana, khana khilana</span></div>
+        </li>
+        <li>
+          <div><strong>Viyog Vatsalya</strong><br>
+          <span style="font-size:0.85rem;opacity:0.75;">Mathura jaane par Yashoda ka birah — aansu, tadap, yaad</span></div>
+        </li>
+      </ul>
+      <div style="margin-top:0.8rem;">
+        <span class="tag s">Vatsalya Ras</span>
+        <span class="tag g">Shringar Ras</span>
+        <span class="tag t">Bhakti Ras</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card saffron span-2">
+    <span class="card-icon">🎨</span>
+    <div class="card-label">Sursagar ke Pramukh Khand</div>
+    <h3>सूरसागर — Kya Kya Hai Isme?</h3>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin-top:0.6rem;">
+      <div>
+        <strong style="color:#F5935A;font-size:0.85rem;">Bal Krishna Leela</strong>
+        <p style="font-size:0.88rem;margin-top:0.2rem;">Maiya mori main nahin maakhan khaayo — Krishna ka butter churana, Maiya ka prem</p>
+      </div>
+      <div>
+        <strong style="color:#F5935A;font-size:0.85rem;">Bhramargeet</strong>
+        <p style="font-size:0.88rem;margin-top:0.2rem;">Uddhav-Gopi samvad — gyaan vs bhakti ka sangharsh</p>
+      </div>
+      <div>
+        <strong style="color:#F5935A;font-size:0.85rem;">Raas Leela</strong>
+        <p style="font-size:0.88rem;margin-top:0.2rem;">Krishna aur Gopiyaon ka prem-nritya, Vrindavan mein</p>
+      </div>
+      <div>
+        <strong style="color:#F5935A;font-size:0.85rem;">Venu Geet</strong>
+        <p style="font-size:0.88rem;margin-top:0.2rem;">Bansuri ki dhun aur uska sab par prabhav</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     TAB 3: BHRAMARGEET
+══════════════════════════════════ -->
+<div id="tab-bhramargeet" class="section">
+  <p class="section-label">Bhramargeet — Detailed Content</p>
+
+  <div class="grid-2 mb">
+    <div class="card teal">
+      <span class="card-icon">🐝</span>
+      <div class="card-label">Kya Hai Bhramargeet?</div>
+      <h3>भ्रमरगीत — परिचय</h3>
+      <ul>
+        <li><strong>Sursagar</strong> ka sabse prasiddh khand</li>
+        <li>Source: <strong>Shrimad Bhagvat Puran, Dasham Skand</strong> (10th Chapter)</li>
+        <li>Kul pad: <strong>Sursagar mein ~400+ pad</strong> is vishay par</li>
+        <li>Bhramara = Bhavre (bhaunra/bee) — Uddhav ke liye pratik ke roop mein prayukt</li>
+      </ul>
+    </div>
+    <div class="card lavender">
+      <span class="card-icon">👥</span>
+      <div class="card-label">Mukhya Patra (Characters)</div>
+      <h3>कौन कौन हैं?</h3>
+      <ul>
+        <li><strong>Uddhav</strong> — Krishna ke priya sakha aur gyaani. Mathura se Vrindavan Gopiyaon ko gyaan dene aaye</li>
+        <li><strong>Gopiyan</strong> — Krishna ki prem-bhakt saheliyan. Uddhav ke gyaan ko nahi maanti</li>
+        <li><strong>Bhaunra (Bee)</strong> — Gopiyaon ne Uddhav ki tulna bhavre se ki — dono hi aate hain aur chale jaate hain</li>
+        <li><strong>Sri Krishna</strong> — background mein, jinka viyog sab ke dil mein hai</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card amber mb">
+    <span class="card-icon">⚔️</span>
+    <div class="card-label">Kendra Sangharsh (Central Conflict)</div>
+    <h3>ज्ञान vs भक्ति — The Great Debate</h3>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-top:0.7rem;">
+      <div style="background:rgba(107,78,158,0.1);padding:0.9rem;border-radius:6px;border:1px solid rgba(107,78,158,0.2);">
+        <strong style="color:#B09ADA;">🧠 Uddhav ka Paksha (Gyaan Maarg)</strong>
+        <p style="font-size:0.88rem;margin-top:0.4rem;opacity:0.8;">"Krishna sab jagah hain — Brahman hain. Personal attachment chodo, nirgun brahman ki upasana karo."</p>
+      </div>
+      <div style="background:rgba(192,67,90,0.1);padding:0.9rem;border-radius:6px;border:1px solid rgba(192,67,90,0.2);">
+        <strong style="color:#E07585;">💕 Gopiyaon ka Paksha (Prem Bhakti)</strong>
+        <p style="font-size:0.88rem;margin-top:0.4rem;opacity:0.8;">"Hum toh sirf apne Shyam ko jaanti hain — unke bina gyaan ka kya kaam? Prem hi sacchi bhakti hai!"</p>
+      </div>
+    </div>
+    <p style="margin-top:0.9rem;font-size:0.9rem;opacity:0.8;"><strong>Nishkarsh:</strong> Surdas ne Gopiyon ki <em>prem-bhakti</em> ko Uddhav ke <em>gyaan-maarg</em> se shreshtha bataya — yeh Pushti Maarg ki core philosophy hai.</p>
+  </div>
+
+  <div class="card sage mb">
+    <div class="card-label">Bhramargeet ke Adhyay (Accordion)</div>
+    <h3>📂 Main Themes — Click to Expand</h3>
+  </div>
+
+  <div class="accordion mb">
+    <button class="acc-head open" onclick="toggleAcc(this)">
+      <span>🌸 Viraha (Viyog) — Judai ka Dard</span>
+      <span class="arrow">▼</span>
+    </button>
+    <div class="acc-body open">
+      <div class="example-block">
+        <div class="example-label">Theme</div>
+        Gopiyaon ne Krishna ke jaane ke baad unka viraha itne intense tarike se mahsoos kiya ki patthar bhi pighal jaaye. Har pad mein aansu, yaad, aur intezaar hai. Uddhav ke aane se unka dard aur badha — kyunki woh Krishna ko nahi laaye.
+      </div>
+      <p><strong>Famous line ka bhaav:</strong> "Hari bin rahe na jaaye" — Krishna ke bina ek pal bhi jeena mushkil hai.</p>
+    </div>
+
+    <button class="acc-head" onclick="toggleAcc(this)">
+      <span>😤 Gopiyon ki Vyangya-Vani (Sarcasm)</span>
+      <span class="arrow">▼</span>
+    </button>
+    <div class="acc-body">
+      <div class="example-block">
+        <div class="example-label">Satire</div>
+        Gopiyon ne Uddhav par kaafi vyangya kasa — "Tum gyaan ki baat karte ho, par kya tumne kabhi prem kiya hai? Bhavre ki tarah aaye, phool ka ras liya, aur ud gaye!"
+      </div>
+      <p>Yeh vyangya <strong>Surdas ki kavi-kushalta</strong> ka sabse bada udaharan hai — hasate hasate gehra gyan dete hain.</p>
+    </div>
+
+    <button class="acc-head" onclick="toggleAcc(this)">
+      <span>🏆 Prem ki Jeet — Bhakti Maarg</span>
+      <span class="arrow">▼</span>
+    </button>
+    <div class="acc-body">
+      <div class="example-block">
+        <div class="example-label">Conclusion</div>
+        Ant mein Uddhav ko bhi Gopiyon ke samne jhukna pada. Unhone swikar kiya ki "Mujhe bhi aisi bhakti chahiye jo aap logon ko hai." Prem ki jeet hui.
+      </div>
+      <p>Yeh Surdas ka <strong>central message</strong> hai: <em>Saguna bhakti (prem ke saath) Nirguna gyaan se badkar hai.</em></p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     TAB 4: KAVYA SHAILI
+══════════════════════════════════ -->
+<div id="tab-shaili" class="section">
+  <p class="section-label">Kavya Shaili — Style aur Examples</p>
+
+  <div class="grid-3 mb">
+    <div class="card teal">
+      <span class="card-icon">🗣️</span>
+      <div class="card-label">Bhasha</div>
+      <h3>ब्रजभाषा</h3>
+      <ul>
+        <li>Mathura-Vrindavan ki bolchal ki bhasha</li>
+        <li>Madhur, komal, sangeetmay</li>
+        <li>Surdas ne ise <strong>sahitya ki bhasha</strong> banaya</li>
+        <li>Tulna: jaise Tulsidas ne Awadhi ko — Surdas ne Brijbhasha ko</li>
+      </ul>
+      <div style="margin-top:0.7rem;">
+        <span class="tag t">Brijbhasha</span>
+        <span class="tag g">Madhur</span>
+      </div>
+    </div>
+
+    <div class="card rose">
+      <span class="card-icon">🎵</span>
+      <div class="card-label">Pad / Geya Shaili</div>
+      <h3>पद शैली</h3>
+      <ul>
+        <li><strong>Pad</strong> = ek chhand-badh kavita jo gayi jaaye</li>
+        <li>Har pad mein <strong>sthaayi</strong> (mukhda) + <strong>antara</strong> hota hai</li>
+        <li>Raga-Ragini pe set — classical music se judaav</li>
+        <li>Yahi style aage <em>Hindustani classical sangeet</em> ka aadhar bani</li>
+      </ul>
+    </div>
+
+    <div class="card sage">
+      <span class="card-icon">🎭</span>
+      <div class="card-label">Drishya Chitran</div>
+      <h3>चित्रात्मकता</h3>
+      <ul>
+        <li>Andhe hone ke bawajood <strong>vivid visual imagery</strong></li>
+        <li>Rang, roop, tej — sab ka zinda varnan</li>
+        <li>Krishna ki <strong>pitambar poshak, morpankh, bansuri</strong> — har cheez jaisi ankhon ke saamne ho</li>
+        <li>Sahridaya padhne wala khud woh scene mein pahunch jaata hai</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ALANKAR SECTION -->
+  <div class="card gold mb">
+    <span class="card-icon">💎</span>
+    <div class="card-label">Pramukh Alankaar (Figures of Speech) — Examples ke Saath</div>
+    <h3>अलंकार — काव्य के आभूषण</h3>
+  </div>
+
+  <div class="grid-2 mb">
+    <div class="card lavender">
+      <div class="card-label">1. उपमा (Upma) — Simile</div>
+      <h3>तुलना करना</h3>
+      <div class="example-block">
+        <div class="example-label">Example (bhaav)</div>
+        "Mukh chandra ke samaan hai" — Krishna ka chehra chandrama jaisa ujjwal hai
+      </div>
+      <p style="font-size:0.88rem;">Do cheezon ki tulna <strong>"jaise", "sama", "iv"</strong> jaise shabdon se. Surdas mein bahut common.</p>
+    </div>
+
+    <div class="card rose">
+      <div class="card-label">2. रूपक (Roopak) — Metaphor</div>
+      <h3>एकरूपता</h3>
+      <div class="example-block">
+        <div class="example-label">Example (bhaav)</div>
+        "Naina neer ki dhaar" — aankhon mein aansuon ki nadi beh rahi hai — do ko ek hi mana gaya
+      </div>
+      <p style="font-size:0.88rem;">Upma se alag — yahan <strong>seedha ek cheez dusri hi ban jaati hai</strong>, "jaise" nahi aata.</p>
+    </div>
+
+    <div class="card teal">
+      <div class="card-label">3. उत्प्रेक्षा (Utpreksha) — Fancy</div>
+      <h3>कल्पना करना</h3>
+      <div class="example-block">
+        <div class="example-label">Example (bhaav)</div>
+        "Mano neelam ki shila par deep jal raha ho" — maano, jaise ki yeh cheez woh hai
+      </div>
+      <p style="font-size:0.88rem;"><strong>"Mano", "Manhu", "Janu"</strong> jaise shabdon se pahchano. Kalpana ki udaan.</p>
+    </div>
+
+    <div class="card amber">
+      <div class="card-label">4. अनुप्रास (Anupraas) — Alliteration</div>
+      <h3>व्यंजन आवृत्ति</h3>
+      <div class="example-block">
+        <div class="example-label">Example</div>
+        "Chandani chaadar chhaayi" — ek hi vyanjan (ch) baar baar aana — sunne mein sangeet jaisi dhun
+      </div>
+      <p style="font-size:0.88rem;">Surdas ke pad mein yeh <strong>musical quality</strong> laata hai — gaane mein aur bhi maza aata hai.</p>
+    </div>
+
+    <div class="card sage">
+      <div class="card-label">5. शब्द-शक्ति (Shabd-Shakti)</div>
+      <h3>शब्द की तीन शक्तियाँ</h3>
+      <ul>
+        <li><strong>Abhidha</strong> — shabd ka seedha arth (literal meaning)</li>
+        <li><strong>Lakshana</strong> — saanketic arth (implied meaning)</li>
+        <li><strong>Vyanjana</strong> — chhupaaya hua gehra arth (suggested meaning)</li>
+      </ul>
+      <p style="font-size:0.85rem;margin-top:0.5rem;opacity:0.75;">Surdas ke pad mein teen-teenon shaktiyon ka prayog milta hai — isliye unki kavita bahut gehri hai.</p>
+    </div>
+
+    <div class="card saffron">
+      <div class="card-label">6. विरोधाभास (Virodhaabhas) — Paradox</div>
+      <h3>उल्टी बात</h3>
+      <div class="example-block">
+        <div class="example-label">Example (bhaav)</div>
+        "Andhe ko sab kuch dikha" — Surdas khud andhe the par unki kavya-drishti sabse tej thi
+      </div>
+      <p style="font-size:0.88rem;">Ulti baat jo sach lagti hai. Bhramargeet mein Uddhav jo gyaani tha, woh Gopiyaon se seekhta hai — yeh bhi virodhaabhas.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     TAB 5: HINDI BOLIYAN
+══════════════════════════════════ -->
+<div id="tab-bhasha" class="section">
+  <p class="section-label">Hindi ki Upbhashayein, Boliyan aur Unke Areas</p>
+
+  <div class="tree-wrap mb">
+    <div class="tree">
+      <div class="node">
+        <div class="node-box root">शौरसेनी अपभ्रंश · Shauraseni Apabhramsha</div>
+        <div class="conn-v" style="height:25px;"></div>
+        <div class="node-box" style="background:rgba(107,78,158,0.14);border-color:var(--lavender);color:#B09ADA;font-size:0.95rem;padding:0.58rem 1.4rem;">हिन्दी भाषा · Hindi Bhasha</div>
+        <div class="conn-v" style="height:28px;"></div>
+      </div>
+      <div class="children-row">
+        <div class="h-line" style="width:250px; top:22px;"></div>
+        <div class="child-col">
+          <div class="conn-v" style="height:28px;"></div>
+          <div class="node-box branch">पश्चिमी हिन्दी</div>
+          <div class="conn-v" style="height:18px;"></div>
+          <div class="grandleaves">
+            <div class="node-box leaf">ब्रजभाषा</div>
+            <div class="node-box leaf hl">खड़ी बोली (कौरवी)</div>
+            <div class="node-box leaf">कन्नौजी</div>
+            <div class="node-box leaf">बुन्देली</div>
+            <div class="node-box leaf">हरियाणवी (बाँगरु)</div>
+          </div>
+        </div>
+        <div class="h-line" style="width:28px; top:22px;"></div>
+        <div class="child-col">
+          <div class="conn-v" style="height:28px;"></div>
+          <div class="node-box branch">पूर्वी हिन्दी</div>
+          <div class="conn-v" style="height:18px;"></div>
+          <div class="grandleaves">
+            <div class="node-box leaf">अवधी</div>
+            <div class="node-box leaf">बघेली</div>
+            <div class="node-box leaf">छत्तीसगढ़ी</div>
+          </div>
+        </div>
+        <div class="h-line" style="width:28px; top:22px;"></div>
+        <div class="child-col">
+          <div class="conn-v" style="height:28px;"></div>
+          <div class="node-box branch">बिहारी हिन्दी</div>
+          <div class="conn-v" style="height:18px;"></div>
+          <div class="grandleaves">
+            <div class="node-box leaf">भोजपुरी</div>
+            <div class="node-box leaf">मगही</div>
+            <div class="node-box leaf">मैथिली</div>
+          </div>
+        </div>
+        <div class="h-line" style="width:28px; top:22px;"></div>
+        <div class="child-col">
+          <div class="conn-v" style="height:28px;"></div>
+          <div class="node-box branch">राजस्थानी</div>
+          <div class="conn-v" style="height:18px;"></div>
+          <div class="grandleaves">
+            <div class="node-box leaf">मारवाड़ी</div>
+            <div class="node-box leaf">मेवाड़ी</div>
+            <div class="node-box leaf">ढूंढाड़ी</div>
+          </div>
+        </div>
+        <div class="h-line" style="width:28px; top:22px;"></div>
+        <div class="child-col">
+          <div class="conn-v" style="height:28px;"></div>
+          <div class="node-box branch">पहाड़ी</div>
+          <div class="conn-v" style="height:18px;"></div>
+          <div class="grandleaves">
+            <div class="node-box leaf">गढ़वाली</div>
+            <div class="node-box leaf">कुमाऊँनी</div>
+            <div class="node-box leaf">हिमाचली</div>
+          </div>
+        </div>
+        <div class="h-line" style="width:28px; top:22px;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Dialect Area Details -->
+  <div class="grid-2">
+    <div class="card teal">
+      <span class="card-icon">🗺️</span>
+      <div class="card-label">पश्चिमी हिन्दी — Areas</div>
+      <h3>Western Hindi Belt</h3>
+      <ul>
+        <li><strong>ब्रजभाषा</strong> — Mathura, Vrindavan, Agra, Aligarh <span class="tag g">Surdas ki bhasha</span></li>
+        <li><strong>खड़ी बोली (Kauravi)</strong> — Meerut, Saharanpur, Delhi — <em>Modern Hindi ka aadhar</em></li>
+        <li><strong>कन्नौजी</strong> — Kannauj, Farrukhabad, Etah</li>
+        <li><strong>बुन्देली</strong> — Bundelkhand (Jhansi, Sagar, Tikamgarh)</li>
+        <li><strong>हरियाणवी (बाँगरु)</strong> — Haryana — Rohtak, Hisar, Sonipat</li>
+      </ul>
+    </div>
+
+    <div class="card rose">
+      <span class="card-icon">🗺️</span>
+      <div class="card-label">पूर्वी हिन्दी — Areas</div>
+      <h3>Eastern Hindi Belt</h3>
+      <ul>
+        <li><strong>अवधी</strong> — Ayodhya, Lucknow, Faizabad <span class="tag g">Tulsidas ki bhasha</span></li>
+        <li><strong>बघेली</strong> — Rewa, Satna, Shahdol (MP)</li>
+        <li><strong>छत्तीसगढ़ी</strong> — Chhattisgarh — Raipur, Bilaspur</li>
+      </ul>
+      <div style="margin-top:0.8rem;padding:0.7rem;background:rgba(192,67,90,0.1);border-radius:4px;">
+        <p style="font-size:0.85rem;"><strong>Note:</strong> Awadhi mein Ramcharitmanas (Tulsidas) aur Padmavat (Jayasi) likhe gaye — bahut sahityik mahatva hai!</p>
+      </div>
+    </div>
+
+    <div class="card amber">
+      <span class="card-icon">🗺️</span>
+      <div class="card-label">बिहारी हिन्दी — Areas</div>
+      <h3>Bihari Dialects</h3>
+      <ul>
+        <li><strong>भोजपुरी</strong> — Varanasi, Gorakhpur, Patna, aur Bihar ka pashchimi hissa</li>
+        <li><strong>मगही</strong> — Magadh region — Gaya, Patna, Nalanda</li>
+        <li><strong>मैथिली</strong> — Mithila (North Bihar + Nepal ka kuch hissa) <span class="tag lv">8th Schedule</span></li>
+      </ul>
+      <p style="font-size:0.85rem;margin-top:0.6rem;opacity:0.8;"><em>Maithili ab Constitution ki 8th Schedule mein hai — ek alag manyata prapt bhasha.</em></p>
+    </div>
+
+    <div class="card sage">
+      <span class="card-icon">🗺️</span>
+      <div class="card-label">राजस्थानी & पहाड़ी</div>
+      <h3>Rajasthan & Hills</h3>
+      <ul>
+        <li><strong>मारवाड़ी</strong> — Jodhpur, Barmer, Bikaner — sabse zyada bolne waale</li>
+        <li><strong>मेवाड़ी</strong> — Udaipur, Chittorgarh <span class="tag g">Meera ki bhasha</span></li>
+        <li><strong>ढूंढाड़ी</strong> — Jaipur, Ajmer region</li>
+        <li><strong>गढ़वाली</strong> — Uttarakhand — Pauri, Tehri, Chamoli</li>
+        <li><strong>कुमाऊँनी</strong> — Nainital, Almora, Pithoragarh</li>
+        <li><strong>हिमाचली</strong> — Shimla, Kangra, Mandi</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card lavender mt">
+    <div class="card-label">⭐ Key Facts — Exam Important</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:0.8rem;margin-top:0.5rem;">
+      <div style="background:rgba(107,78,158,0.12);padding:0.7rem;border-radius:4px;">
+        <strong style="color:#B09ADA;">5 Upbhashayein</strong>
+        <p style="font-size:0.85rem;margin-top:0.2rem;">Pashchimi, Purvi, Bihari, Rajasthani, Pahadi</p>
+      </div>
+      <div style="background:rgba(107,78,158,0.12);padding:0.7rem;border-radius:4px;">
+        <strong style="color:#B09ADA;">18 Boliyan</strong>
+        <p style="font-size:0.85rem;margin-top:0.2rem;">In 5 upbhashayein mein kul 18 boliyan hain</p>
+      </div>
+      <div style="background:rgba(107,78,158,0.12);padding:0.7rem;border-radius:4px;">
+        <strong style="color:#B09ADA;">Khadi Boli = Kauravi</strong>
+        <p style="font-size:0.85rem;margin-top:0.2rem;">Aaj ki standard Hindi ka aadhar — Delhi, Meerut area</p>
+      </div>
+      <div style="background:rgba(107,78,158,0.12);padding:0.7rem;border-radius:4px;">
+        <strong style="color:#B09ADA;">Maithili</strong>
+        <p style="font-size:0.85rem;margin-top:0.2rem;">8th Schedule mein — alag manyata prapt bhaasha</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     TAB 6: SUMMARY
+══════════════════════════════════ -->
+<div id="tab-summary" class="section">
+  <p class="section-label">Quick Revision — Exam Ready</p>
+  <div class="table-wrap mb">
+    <table>
+      <thead>
+        <tr><th>Topic</th><th>Key Details</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>जन्म-मृत्यु</td><td>1478–1583 AD (approx); Sihi village → Parasoli, Mathura</td></tr>
+        <tr><td>Guru</td><td>Vallabhacharya — Pushti Maarg ke pravartak</td></tr>
+        <tr><td>Sampraday</td><td>Pushti Maarg; Ashta Chhap ke sabse pramukh kavi</td></tr>
+        <tr><td>Bhakti Prakar</td><td>Sakhya Bhakti (dost ki tarah); Saguna Bhakti (sakar roop)</td></tr>
+        <tr><td>Teen Rachnayein</td><td>Sursagar (main), Sur Saravali, Sahitya Lahiri</td></tr>
+        <tr><td>Vatsalya Ras</td><td>Samrat of Vatsalya Ras; Sanyog + Viyog dono</td></tr>
+        <tr><td>Bhramargeet</td><td>Sursagar ka khand; Source = Dasham Skand; Uddhav vs Gopiyan; Gyaan vs Prem</td></tr>
+        <tr><td>Bhasha</td><td>Brijbhasha — Mathura-Vrindavan ki bhasha</td></tr>
+        <tr><td>Shaili</td><td>Pad/Geya Shaili; Raga-Ragini based; Drishyatmak</td></tr>
+        <tr><td>Alankaar</td><td>Upma, Roopak, Utpreksha, Anupraas, Shabd-Shakti, Virodhaabhas</td></tr>
+        <tr><td>Hindi ki Utpatti</td><td>Shauraseni Apabhramsha → Hindi Bhasha</td></tr>
+        <tr><td>5 Upbhashayein</td><td>Pashchimi, Purvi, Bihari, Rajasthani, Pahadi</td></tr>
+        <tr><td>Brijbhasha Area</td><td>Mathura, Agra, Aligarh — Surdas ki bhasha</td></tr>
+        <tr><td>Khadi Boli Area</td><td>Meerut, Delhi, Saharanpur — Modern Hindi ka aadhar; Doosra naam: Kauravi</td></tr>
+        <tr><td>Awadhi Area</td><td>Ayodhya, Lucknow — Tulsidas (Ramcharitmanas) ki bhasha</td></tr>
+        <tr><td>Maithili</td><td>North Bihar — 8th Schedule mein shamil (alag manyata)</td></tr>
+        <tr><td>Total Boliyan</td><td>5 upbhashayein → 18 boliyan</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card gold">
+    <div class="card-label">🎯 Top Exam Points</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.8rem;margin-top:0.5rem;">
+      <div>
+        <p style="font-size:0.9rem;">✅ Surdas = <strong>Vatsalya Ras ke Samrat</strong></p>
+        <p style="font-size:0.9rem;">✅ Bhramargeet Source = <strong>Dasham Skand</strong></p>
+        <p style="font-size:0.9rem;">✅ Gyaan (Uddhav) vs Prem (Gopiyan) = <strong>Bhramargeet ka kendra</strong></p>
+        <p style="font-size:0.9rem;">✅ Ashta Chhap mein <strong>Surdas sarvashreshtha</strong></p>
+      </div>
+      <div>
+        <p style="font-size:0.9rem;">✅ Khadi Boli = <strong>Kauravi</strong> (MCQ trap!)</p>
+        <p style="font-size:0.9rem;">✅ <strong>Maithili</strong> — 8th Schedule mein</p>
+        <p style="font-size:0.9rem;">✅ <strong>Meewadi</strong> = Meera ki bhasha</p>
+        <p style="font-size:0.9rem;">✅ Awadhi = <strong>Tulsidas + Jayasi</strong> ki bhasha</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function showTab(name, btn) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('visible'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('visible');
+  btn.classList.add('active');
+}
+
+function toggleAcc(btn) {
+  const body = btn.nextElementSibling;
+  const isOpen = body.classList.contains('open');
+  // close all
+  document.querySelectorAll('.acc-body').forEach(b => b.classList.remove('open'));
+  document.querySelectorAll('.acc-head').forEach(h => h.classList.remove('open'));
+  if (!isOpen) {
+    body.classList.add('open');
+    btn.classList.add('open');
+  }
+}
+</script>
+</body>
+</html>
